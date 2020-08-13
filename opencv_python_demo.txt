@@ -1,0 +1,54 @@
+#############################################################
+OpenCV サンプルコード
+
+画像に以下3つの前処理を実施し、輪郭、エッジをクリアにする
+画像処理を施すデモ
+
+・グレースケール化
+・平滑化(中央値フィルタ)
+・Canny
+
+#############################################################
+
+#画像ファイルdog.jpgの確認
+
+
+#必要なライブラリのインポート
+import cv2
+import matplotlib.pyplot as plt
+
+#画像ファイルを読み込み、グレースケール化
+dog_grayed = cv2.imread("dog.jpg", cv2.IMREAD_GRAYSCALE)
+
+#画像ファイルとして保存
+cv2.imwrite("dog_grayed.jpg", dog_grayed)
+
+
+
+#Canny法でエッジを検出
+dog_grayed_canny = cv2.Canny(dog_grayed, 50, 110)
+
+#画像ファイルとして保存
+cv2.imwrite("dog_grayed_canny.jpg", dog_grayed_canny)
+
+#画像ファイルを確認
+#犬の輪郭以外にアスファルトのエッジまで検出してしまっている
+#これを中央値フィルタで解消してゆく
+
+#画像に中央値フィルタをかける
+dog_grayed_median = cv2.medianBlur(dog_grayed,9)
+
+#画像ファイルとして保存
+cv2.imwrite("dog_grayed_median.jpg", dog_grayed_median)
+
+#画像にフィルタがかかっていることを確認
+#これによりアスファルトのエッジがスムージングされCannyで
+#検出されなくなる
+
+#中央値フィルタ済み画像のcanny
+dog_grayed_median_canny = cv2.Canny(dog_grayed_median, 50, 110)
+
+#画像ファイルとして保存
+cv2.imwrite("dog_grayed_median_canny.jpg", dog_grayed_median_canny)
+
+#対象物だけのエッジがとれていることを確認
